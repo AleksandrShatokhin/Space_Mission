@@ -1,0 +1,14 @@
+.DS_Store
+Library/
+Packages/
+UserSettings/
+Logs/
+obj/
+Temp/
+ProjectSettings/
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor-firstpass
+New Space.sln
+ProjectSettings/
+.vs/
+.vscode/
