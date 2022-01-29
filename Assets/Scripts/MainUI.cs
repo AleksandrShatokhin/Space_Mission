@@ -7,9 +7,10 @@ using System;
 public class MainUI : MonoBehaviour
 {
     public TextMeshProUGUI bulletsInScreen;
+
     public GameObject player;
 
-    void Start()
+    void Awake()
     {
         bulletsInScreen.text = null;
 

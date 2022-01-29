@@ -46,23 +46,8 @@ public class PlayerController : MonoBehaviour, IDeathable
 
         // придаем движение персонажа
         movement = transform.right * horizontal + transform.forward * vertical;
-        //ch_player.Move(movement * 12 * Time.deltaTime);
         rb_Player.MovePosition(transform.position + (movement * speedPlayer/16));
-
-        //if (isJump == true) // добавим ограничитель движения персонажа если он в прыжке
-        //{
-        //    movement = transform.forward * vertical;
-        //    rb_Player.MovePosition(transform.position + (movement * speedPlayer/16));
-        //}
     }
-
-    //void JumpPlayer() // добавим прижок персонажу
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space) && isJump == false)
-    //    {
-    //        rb_Player.AddForce(Vector3.up * 50, ForceMode.Impulse);
-    //    }
-    //}
 
     void BoostSpeed() // добавим нашему персонажу возможность увеличить скорость движения
     {
@@ -164,6 +149,7 @@ public class PlayerController : MonoBehaviour, IDeathable
         }
     }
 
+    //для вызова в MainUI
     public int GetCurrentBullet()
     {
         return currentQuantityBullet;
@@ -185,20 +171,4 @@ public class PlayerController : MonoBehaviour, IDeathable
     {
         Death();
     }
-
-    //void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.gameObject.layer == 6)
-    //    {
-    //        isJump = false;
-    //    }
-    //}
-
-    //void OnCollisionExit(Collision collision)
-    //{
-    //    if (collision.gameObject.layer == 6)
-    //    {
-    //        isJump = true;
-    //    }
-    //}
 }

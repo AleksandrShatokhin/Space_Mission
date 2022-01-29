@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class HealthComponent : MonoBehaviour
 {
-    [SerializeField] private float health;
+    [SerializeField] private int health;
 
-    public void ChangeHealth(float hp)
+    public void ChangeHealth(int hp)
     {
         health -= hp;
 
