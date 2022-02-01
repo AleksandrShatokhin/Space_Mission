@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour, IDeathable
     public LayerMask playerMask;
     public LayerMask obstacleMask;
 
-    public bool canSeePlayer;
+    [SerializeField] private bool canSeePlayer, isPersecution;
     
     void Start()
     {
@@ -43,24 +43,32 @@ public class EnemyController : MonoBehaviour, IDeathable
 
         distanceToPlayer = Vector3.Distance(targetPlayer.transform.position, transform.position);
 
-        // если игрок находится не в поле зрения
-        if (!canSeePlayer)
+        if (!isPersecution)
         {
-            MoveEnemyPatrolling();
-        }
+            // если игрок находится не в поле зрения
+            if (!canSeePlayer)
+            {
+                MoveEnemyPatrolling();
+            }
 
-        // добавим условие, если наш игрок находится на короткой дистанции или подходит со спины
-        // условно вражеский персонаж его замечает (слышит) и поворачивается на игрока
-        if (distanceToPlayer <= 2 && !canSeePlayer)
-        {
-            Vector3 directionToPlayer = targetPlayer.transform.position - transform.position;
-            Quaternion rotationToPlayer = Quaternion.LookRotation(directionToPlayer, Vector3.up);
-            Quaternion rotationEnemy = Quaternion.Lerp(transform.rotation, rotationToPlayer, 3 * Time.deltaTime);
-            transform.rotation = rotationEnemy;
-        }
+            // добавим условие, если наш игрок находится на короткой дистанции или подходит со спины
+            // условно вражеский персонаж его замечает (слышит) и поворачивается на игрока
+            if (distanceToPlayer <= 2 && !canSeePlayer)
+            {
+                //Vector3 directionToPlayer = targetPlayer.transform.position - transform.position;
+                //Quaternion rotationToPlayer = Quaternion.LookRotation(directionToPlayer, Vector3.up);
+                //Quaternion rotationEnemy = Quaternion.Lerp(transform.rotation, rotationToPlayer, 3 * Time.deltaTime);
+                //transform.rotation = rotationEnemy;
+                IsPersecution(true);
+            }
 
-        // если игрока заметил вражеский персонаж
-        if (canSeePlayer)
+            // если игрока заметил вражеский персонаж
+            if (canSeePlayer)
+            {
+                IsPersecution(true);
+            }
+        }
+        else
         {
             MoveWhenSeePlayer();
         }
@@ -146,6 +154,12 @@ public class EnemyController : MonoBehaviour, IDeathable
         }
         else if (canSeePlayer)
             canSeePlayer = false;
+    }
+
+    public bool IsPersecution(bool variable)
+    {
+        isPersecution = variable;
+        return isPersecution;
     }
 
     // Реализация интерфейса

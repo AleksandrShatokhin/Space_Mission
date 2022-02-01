@@ -23,12 +23,6 @@ public class ProjectilePlayer : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer == 3) // 3 - OtherObject
-        {
-            Destroy(this.gameObject);
-            Destroy(other.gameObject);
-        }
-
         if (other.gameObject.layer == 6 || other.gameObject.layer == 7) // 6 - Ground, 7 - Enemy
         {
             Destroy(this.gameObject);
@@ -36,6 +30,7 @@ public class ProjectilePlayer : MonoBehaviour
             if (other.gameObject.layer == 7)
             {
                 other.gameObject.GetComponent<HealthComponent>().ChangeHealth(damage);
+                other.gameObject.GetComponent<EnemyController>().IsPersecution(true);
             }
         }
     }

@@ -13,7 +13,7 @@ public class DoorR1R2 : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" || other.gameObject.layer == 7) // layer 7 - enemy
         {
             anim_Door.SetBool("isOpen", true);
         }
@@ -21,7 +21,7 @@ public class DoorR1R2 : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player" || other.gameObject.layer == 7) // layer 7 - enemy
         {
             anim_Door.SetBool("isOpen", false);
         }
