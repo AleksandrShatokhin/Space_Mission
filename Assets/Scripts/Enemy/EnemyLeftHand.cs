@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyLeftHand : MonoBehaviour
 {
     private GameObject targetPlayer;
-    private int damage = 1;
+    private int damage;
 
     private void Start()
     {
@@ -16,6 +16,8 @@ public class EnemyLeftHand : MonoBehaviour
     {
         if (other.gameObject == targetPlayer)
         {
+            damage = Random.Range(5, 15);
+
             targetPlayer.GetComponent<HealthComponent>().ChangeHealth(damage);
         }
     }

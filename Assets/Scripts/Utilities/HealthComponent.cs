@@ -6,13 +6,18 @@ public class HealthComponent : MonoBehaviour
 {
     [SerializeField] private int health;
 
-    public void ChangeHealth(int hp)
+    public void ChangeHealth(int damage)
     {
-        health -= hp;
+        health -= damage;
 
         if (health <= 0)
         {
             GetComponentInParent<IDeathable>().Kill();
         }
+    }
+
+    public int GetHealth()
+    {
+        return health;
     }
 }

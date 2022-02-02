@@ -55,10 +55,6 @@ public class EnemyController : MonoBehaviour, IDeathable
             // условно вражеский персонаж его замечает (слышит) и поворачивается на игрока
             if (distanceToPlayer <= 2 && !canSeePlayer)
             {
-                //Vector3 directionToPlayer = targetPlayer.transform.position - transform.position;
-                //Quaternion rotationToPlayer = Quaternion.LookRotation(directionToPlayer, Vector3.up);
-                //Quaternion rotationEnemy = Quaternion.Lerp(transform.rotation, rotationToPlayer, 3 * Time.deltaTime);
-                //transform.rotation = rotationEnemy;
                 IsPersecution(true);
             }
 
@@ -81,6 +77,7 @@ public class EnemyController : MonoBehaviour, IDeathable
         {
             agent.SetDestination(targetPlayer.transform.position);
             agent.stoppingDistance = 1;
+            anim_enemy.SetBool("isWalk", true);
         }
 
         // если игрок на дистанции атаки
