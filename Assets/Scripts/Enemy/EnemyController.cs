@@ -17,6 +17,8 @@ public class EnemyController : EnemyManager
 
     void Update()
     {
+        Debug.Log(pointForMove);
+
         // для избежания ошибки, после уничтожения игрока появлятся потеря targetPlayer
         if (targetPlayer == null)
         {
