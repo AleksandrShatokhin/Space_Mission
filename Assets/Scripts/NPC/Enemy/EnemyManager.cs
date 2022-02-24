@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class EnemyManager : MonoBehaviour, IDeathable
+public abstract class EnemyManager : ControllerNPC
 {
     [SerializeField] protected Transform targetPlayer;
     protected float distanceToPlayer;
@@ -13,13 +13,7 @@ public abstract class EnemyManager : MonoBehaviour, IDeathable
 
     protected Vector3 pointForMove;
 
-    [SerializeField] protected float radiusView;
-    [SerializeField] [Range(0, 360)] protected float angleView;
-
-    [SerializeField] protected LayerMask playerMask;
-    [SerializeField] protected LayerMask obstacleMask;
-
-    [SerializeField] protected bool canSeePlayer, isPersecution;
+    [SerializeField] protected bool isPersecution;
 
     // каждый enemy должен реализовывать конкретные действия
     // 1 - движение (патрулирование) по отведенной ему территории
@@ -53,47 +47,11 @@ public abstract class EnemyManager : MonoBehaviour, IDeathable
         }
     }
 
-    // поле зрения вражеским персонажем нашего игрока
-    protected bool FieldOfView()
-    {
-        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radiusView, playerMask);
-
-        if (rangeChecks.Length != 0)
-        {
-            Transform target = rangeChecks[0].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-
-            if (Vector3.Angle(transform.forward, directionToTarget) < angleView / 2)
-            {
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
-                    canSeePlayer = true;
-                else
-                    canSeePlayer = false;
-            }
-            else
-                canSeePlayer = false;
-        }
-        else if (canSeePlayer)
-            canSeePlayer = false;
-
-        return canSeePlayer;
-    }
-
     // вражеский персонаж должен переходить в режим преследования, если в него выстрелить
     // для реализации этого пока сделаю данный код
     public bool IsPersecution(bool variable)
     {
         isPersecution = variable;
         return isPersecution;
-    }
-
-    // Реализация интерфейса по HealthComponent
-    void IDeathable.Kill()
-    {
-        Debug.Log("Enemy killed");
-
-        Destroy(this.gameObject);
     }
 }

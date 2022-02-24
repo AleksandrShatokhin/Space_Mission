@@ -162,9 +162,12 @@ public class PlayerController : MonoBehaviour, IDeathable
 
     public void Death()
     {
-        Debug.Log("Game Over");
+        bool isDeath = GameController.GetInstance().IsDeathPlayer();
 
-        GameController.GetInstance().DeathPlayer();
+        if (!isDeath)
+        {
+            GameController.GetInstance().DeathPlayer();
+        }
     }
 
     void IDeathable.Kill()

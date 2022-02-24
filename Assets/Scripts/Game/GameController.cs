@@ -21,6 +21,11 @@ public class GameController : MonoBehaviour
         isDeathPlayer = false;
     }
 
+    public void WinPlayer()
+    {
+        Debug.Log("You saved all your friends");
+    }
+
     public void DeathPlayer()
     {
         isDeathPlayer = true;
