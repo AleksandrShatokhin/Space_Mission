@@ -6,3 +6,10 @@ public enum Layers
     Player = 8,
     Door = 9
 }
+
+public enum Rooms
+{
+    Room1 = 0,
+    Hallway = 1,
+    Warehouse = 2
+}

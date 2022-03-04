@@ -10,15 +10,15 @@ public class EnemyController : EnemyManager
         agent = this.GetComponent<NavMeshAgent>();
         anim_enemy = this.GetComponent<Animator>();
 
+        targetPlayer = GameObject.Find("Player").GetComponent<Transform>();
+
         StartCoroutine(FOVRoutine());
 
-        CheckNameEnemy();
+        CheckRoomForEnemy();
     }
 
     void Update()
     {
-        //Debug.Log(pointForMove);
-
         // для избежания ошибки, после уничтожения игрока появлятся потеря targetPlayer
         if (targetPlayer == null)
         {
@@ -104,7 +104,7 @@ public class EnemyController : EnemyManager
     IEnumerator CreateNewRandomPoint()
     {
         yield return new WaitForSeconds(1.5f);
-        CheckNameEnemy();
+        CheckRoomForEnemy();
     }
 
     // создадим постоянную проверку может ли вражеский персонаж видеть игрока

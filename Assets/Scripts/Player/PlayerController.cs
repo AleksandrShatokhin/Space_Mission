@@ -6,14 +6,13 @@ public class PlayerController : MonoBehaviour, IDeathable
 {
     private Rigidbody rb_Player;
     private Animator animator_Player;
-    private CharacterController ch_player;
 
     [SerializeField] private GameObject bullet, spawnBullet;
     [SerializeField] private int bulletInWeapon, maxBulletInWeapon;
     private int differenceBullet, currentQuantityBullet;
 
     [SerializeField] private float speedPlayer;
-    [SerializeField] private bool /*isJump, */isReloadWeapon, isRun;
+    [SerializeField] private bool isReloadWeapon, isRun;
 
     private Vector3 movement;
 
@@ -22,7 +21,6 @@ public class PlayerController : MonoBehaviour, IDeathable
     {
         rb_Player = GetComponent<Rigidbody>();
         animator_Player = GetComponent<Animator>();
-        ch_player = GetComponent<CharacterController>();
 
         currentQuantityBullet = bulletInWeapon;
     }

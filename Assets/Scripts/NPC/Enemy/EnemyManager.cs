@@ -27,22 +27,30 @@ public abstract class EnemyManager : ControllerNPC
 
 
     // проверить объект, на котором висит скрипт, чтоб точки для движения задавались разные
-    protected void CheckNameEnemy()
+    protected void CheckRoomForEnemy()
     {
-        string name = this.gameObject.transform.name;
+        StartCoroutine(DelayCreatePointForMove());
+    }
 
-        switch (name)
+    IEnumerator DelayCreatePointForMove()
+    {
+        // добавил небольшую задерку, так как сначала должен заспауниться вражеский персонаж в сцене и после дальнейший код (баги без задерки)
+        yield return new WaitForSeconds(0.1f);
+
+        int plane = GameObject.Find("Game").GetComponent<Spawn>().RandPlane();
+
+        switch (plane)
         {
-            case "Biomech_Mutant_Room1":
+            case (int)Rooms.Room1:
                 pointForMove = new Vector3(Random.Range(-8, 8), transform.position.y, Random.Range(-4, 34));
                 break;
 
-            case "Biomech_Mutant_Hallway":
+            case (int)Rooms.Hallway:
                 pointForMove = new Vector3(Random.Range(-28, 28), transform.position.y, Random.Range((float)36.5, 43));
                 break;
 
-            case "Biomech_Mutant_Skin_1_bloody":
-                pointForMove = new Vector3(Random.Range(-28, 28), transform.position.y, Random.Range((float)36.5, 43));
+            case (int)Rooms.Warehouse:
+                pointForMove = new Vector3(Random.Range((float)-50.5, (float)-31.5), transform.position.y, Random.Range((float)31.5, (float)48.5));
                 break;
         }
     }
