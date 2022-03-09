@@ -36,4 +36,9 @@ public class GameController : MonoBehaviour
     {
         return isDeathPlayer;
     }
+
+    public List<MeshCollider> GetPlane()
+    {
+        return this.gameObject.GetComponent<Spawn>().planes;
+    }
 }

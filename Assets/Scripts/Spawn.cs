@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
+    // варианты вражеских персонажей и список комнат в игре
     public GameObject[] Enemies;
     public List<MeshCollider> planes;
 
+    // для заполнения каждой комнаты вражескими персонажами
     public GameObject[] enemyRoom1, enemyRoom2, enemyWarehouse;
 
     private float x, z;
@@ -28,7 +30,6 @@ public class Spawn : MonoBehaviour
                 for (int j = 0; j < enemyRoom1.Length; j++)
                 {
                     randEnemy = Random.Range(0, Enemies.Length);
-
                     enemyRoom1[j] = EnemyCreate(i, randEnemy);
                 }
             }
@@ -38,7 +39,6 @@ public class Spawn : MonoBehaviour
                 for (int j = 0; j < enemyRoom2.Length; j++)
                 {
                     randEnemy = Random.Range(0, Enemies.Length);
-
                     enemyRoom2[j] = EnemyCreate(i, randEnemy);
                 }
             }
@@ -48,12 +48,9 @@ public class Spawn : MonoBehaviour
                 for (int j = 0; j < enemyWarehouse.Length; j++)
                 {
                     randEnemy = Random.Range(0, Enemies.Length);
-
                     enemyWarehouse[j] = EnemyCreate(i, randEnemy);
                 }
             }
-
-            Debug.Log(i);
         }
     }
 
@@ -63,7 +60,7 @@ public class Spawn : MonoBehaviour
         x = Random.Range(planes[plane].transform.position.x - Random.Range(0, planes[plane].bounds.extents.x), planes[plane].transform.position.x + Random.Range(0, planes[plane].bounds.extents.x));
         z = Random.Range(planes[plane].transform.position.z - Random.Range(0, planes[plane].bounds.extents.z), planes[plane].transform.position.z + Random.Range(0, planes[plane].bounds.extents.z));
 
-        spawnPos = new Vector3(x, 1, z);
+        spawnPos = new Vector3(x, 0.2f, z);
 
         // спауним случайного вражеского персонажа
         GameObject enemy = Instantiate(Enemies[whatEnamy], spawnPos, Quaternion.identity);
@@ -73,50 +70,7 @@ public class Spawn : MonoBehaviour
 
     public int RandPlane()
     {
+
         return randPlane;
     }
 }
-
-//void RandomSpawn()
-//{
-//    RandPlane();
-
-//    // Зададим случайную точку для спауна в пределах плоскости комнаты
-//    x = Random.Range(planes[RandPlane()].transform.position.x - Random.Range(0, planes[RandPlane()].bounds.extents.x), planes[RandPlane()].transform.position.x + Random.Range(0, planes[RandPlane()].bounds.extents.x));
-//    z = Random.Range(planes[RandPlane()].transform.position.z - Random.Range(0, planes[RandPlane()].bounds.extents.z), planes[RandPlane()].transform.position.z + Random.Range(0, planes[RandPlane()].bounds.extents.z));
-
-//    spawnPos = new Vector3(x, 2, z);
-
-//    // спауним случайного вражеского персонажа
-//    RandEnemy();
-//    Instantiate(Enemies[RandEnemy()], spawnPos, Quaternion.identity);
-
-//    Debug.Log("Plane: " + RandPlane() + " / Enemy " + RandEnemy());
-//}
-
-//GameObject EnemyCreate()
-//{
-//    RandPlane();
-
-//    // Зададим случайную точку для спауна в пределах плоскости комнаты
-//    x = Random.Range(planes[RandPlane()].transform.position.x - Random.Range(0, planes[RandPlane()].bounds.extents.x), planes[RandPlane()].transform.position.x + Random.Range(0, planes[RandPlane()].bounds.extents.x));
-//    z = Random.Range(planes[RandPlane()].transform.position.z - Random.Range(0, planes[RandPlane()].bounds.extents.z), planes[RandPlane()].transform.position.z + Random.Range(0, planes[RandPlane()].bounds.extents.z));
-
-//    spawnPos = new Vector3(x, 2, z);
-
-//    // спауним случайного вражеского персонажа
-//    RandEnemy();
-//    GameObject enemy = Instantiate(Enemies[RandEnemy()], spawnPos, Quaternion.identity);
-
-//    Debug.Log("Plane: " + RandPlane() + " / Enemy " + RandEnemy());
-
-//    return enemy;
-//}
-
-//void SpawnEnemy()
-//{
-//    for (int i = 0; i < enemyRoom1.Length; i++)
-//    {
-//        enemyRoom1[i] = EnemyCreate();
-//    }
-//}

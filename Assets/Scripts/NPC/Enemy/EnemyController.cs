@@ -13,8 +13,6 @@ public class EnemyController : EnemyManager
         targetPlayer = GameObject.Find("Player").GetComponent<Transform>();
 
         StartCoroutine(FOVRoutine());
-
-        CheckRoomForEnemy();
     }
 
     void Update()
@@ -104,7 +102,8 @@ public class EnemyController : EnemyManager
     IEnumerator CreateNewRandomPoint()
     {
         yield return new WaitForSeconds(1.5f);
-        CheckRoomForEnemy();
+        
+        CheckPlaneContact();
     }
 
     // создадим постоянную проверку может ли вражеский персонаж видеть игрока
