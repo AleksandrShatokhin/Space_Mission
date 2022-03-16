@@ -27,13 +27,28 @@ public class PlayerController : MonoBehaviour, IDeathable
 
     void Update()
     {
-        Shot();
-        BoostSpeed();
+        bool isPause = GameController.GetInstance().IsPauseMode();
+
+        if (!isPause)
+        {
+            Shot();
+            BoostSpeed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameController.GetInstance().PauseMode();
+        }
     }
 
     void FixedUpdate()
     {
-        MovePlayer();
+        bool isPause = GameController.GetInstance().IsPauseMode();
+
+        if (!isPause)
+        {
+            MovePlayer();
+        }
     }
 
     void MovePlayer()
@@ -152,9 +167,16 @@ public class PlayerController : MonoBehaviour, IDeathable
     {
         return currentQuantityBullet;
     }
-
+    //для вызова в MainUI
     public int GetMaxBullet()
     {
+        return maxBulletInWeapon;
+    }
+
+    //для подбора патронов
+    public int GetMaxBullet(int bullet)
+    {
+        maxBulletInWeapon += bullet;
         return maxBulletInWeapon;
     }
 

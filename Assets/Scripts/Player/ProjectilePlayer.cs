@@ -13,7 +13,7 @@ public class ProjectilePlayer : MonoBehaviour
         rb_Projectile = GetComponent<Rigidbody>();
     }
 
-    
+
     void FixedUpdate()
     {
         rb_Projectile.AddForce(transform.forward * forceRate, ForceMode.Impulse);
@@ -23,15 +23,12 @@ public class ProjectilePlayer : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.layer == 6 || other.gameObject.layer == 7) // 6 - Ground, 7 - Enemy
-        {
-            Destroy(this.gameObject);
+        Destroy(this.gameObject);
 
-            if (other.gameObject.layer == 7)
-            {
-                other.gameObject.GetComponent<HealthComponent>().ChangeHealth(damage);
-                other.gameObject.GetComponent<EnemyController>().IsPersecution(true);
-            }
+        if (other.gameObject.layer == (int)Layers.Enemy)
+        {
+            other.gameObject.GetComponent<HealthComponent>().ChangeHealth(damage);
+            other.gameObject.GetComponent<EnemyController>().IsPersecution(true);
         }
     }
 }

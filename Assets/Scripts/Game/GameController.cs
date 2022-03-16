@@ -7,9 +7,9 @@ public class GameController : MonoBehaviour
     private static GameController instance;
     public static GameController GetInstance() => instance;
 
-
-    [SerializeField] private GameObject WindowOfGameOver;
-    [SerializeField] private bool isDeathPlayer;
+    [SerializeField] private GameObject mainui;
+    [SerializeField] private GameObject windowOfGameOver, winWindow, pauseWindow;
+    [SerializeField] private bool isDeathPlayer, isPauseMode;
 
     private void Awake()
     {
@@ -19,22 +19,48 @@ public class GameController : MonoBehaviour
     void Start()
     {
         isDeathPlayer = false;
+        isPauseMode = false;
+    }
+
+    public void PauseMode()
+    {
+        if (!isPauseMode)
+        {
+            isPauseMode = true;
+            mainui.SetActive(false);
+            Instantiate(pauseWindow, pauseWindow.transform.position, pauseWindow.transform.rotation);
+        }
+        else
+        {
+            GameObject pause = GameObject.Find("PauseWindow(Clone)");
+
+            isPauseMode = false;
+            mainui.SetActive(true);
+            Destroy(pause);
+        }
+
     }
 
     public void WinPlayer()
     {
-        Debug.Log("You saved all your friends");
+        isPauseMode = true;
+        Instantiate(winWindow, winWindow.transform.position, winWindow.transform.rotation);
     }
 
     public void DeathPlayer()
     {
         isDeathPlayer = true;
-        Instantiate(WindowOfGameOver, WindowOfGameOver.transform.position, WindowOfGameOver.transform.rotation);
+        Instantiate(windowOfGameOver, windowOfGameOver.transform.position, windowOfGameOver.transform.rotation);
     }
 
     public bool IsDeathPlayer()
     {
         return isDeathPlayer;
+    }
+
+    public bool IsPauseMode()
+    {
+        return isPauseMode;
     }
 
     public List<MeshCollider> GetPlane()

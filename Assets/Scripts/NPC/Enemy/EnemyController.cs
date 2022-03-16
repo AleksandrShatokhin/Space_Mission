@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyController : EnemyManager
-{ 
+{
     void Start()
     {
         agent = this.GetComponent<NavMeshAgent>();
@@ -17,46 +17,61 @@ public class EnemyController : EnemyManager
 
     void Update()
     {
-        // для избежания ошибки, после уничтожения игрока появлятся потеря targetPlayer
-        if (targetPlayer == null)
+        bool isPause = GameController.GetInstance().IsPauseMode();
+
+        if (isPause)
         {
-            return;
-        }
-
-        distanceToPlayer = Vector3.Distance(targetPlayer.transform.position, transform.position);
-
-        if (!isPersecution)
-        {
-            // если игрок находится не в поле зрения
-            if (!FieldOfView())
-            {
-                MoveEnemyPatrolling();
-            }
-
-            // добавим условие, если наш игрок находится на короткой дистанции или подходит со спины
-            // условно вражеский персонаж его замечает (слышит) и поворачивается на игрока
-            if (distanceToPlayer <= 2 && !FieldOfView())
-            {
-                IsPersecution(true);
-            }
-
-            // если игрока заметил вражеский персонаж
-            if (FieldOfView())
-            {
-                IsPersecution(true);
-            }
+            // если игрок в режиме паузы, останавливаем движение вражеских персонажей
+            agent.isStopped = true;
         }
         else
         {
-            MoveWhenSeePlayer();
+            // если игрок вышел из режима паузы, возобновляем движение вражеских персонажей
+            agent.isStopped = false;
+
+            // для избежания ошибки, после уничтожения игрока появлятся потеря targetPlayer
+            if (targetPlayer == null)
+            {
+                return;
+            }
+
+            distanceToPlayer = Vector3.Distance(targetPlayer.transform.position, transform.position);
+
+            if (!isPersecution)
+            {
+                // если игрок находится не в поле зрения
+                if (!FieldOfView())
+                {
+                    MoveEnemyPatrolling();
+                }
+
+                // добавим условие, если наш игрок находится на короткой дистанции или подходит со спины
+                // условно вражеский персонаж его замечает (слышит) и поворачивается на игрока
+                if (distanceToPlayer <= 2 && !FieldOfView())
+                {
+                    IsPersecution(true);
+                }
+
+                // если игрока заметил вражеский персонаж
+                if (FieldOfView())
+                {
+                    IsPersecution(true);
+                }
+            }
+            else
+            {
+                MoveWhenSeePlayer();
+            }
         }
     }
 
     // реализация атаки нашего игрока
     public override void Attack()
     {
+        bool isDeathPlayer = GameController.GetInstance().IsDeathPlayer();
+
         // если игрок на дистанции атаки
-        if (distanceToPlayer <= 2 && !GameController.GetInstance().IsDeathPlayer() && FieldOfView())
+        if (distanceToPlayer <= 2 && !isDeathPlayer && FieldOfView())
         {
             anim_enemy.SetBool("isWalk", false);
             anim_enemy.SetBool("isAttack", true);
@@ -102,7 +117,7 @@ public class EnemyController : EnemyManager
     IEnumerator CreateNewRandomPoint()
     {
         yield return new WaitForSeconds(1.5f);
-        
+
         CheckPlaneContact();
     }
 

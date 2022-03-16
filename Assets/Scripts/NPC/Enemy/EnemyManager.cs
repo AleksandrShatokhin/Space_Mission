@@ -66,6 +66,20 @@ public abstract class EnemyManager : ControllerNPC
         {
             pointForMove = new Vector3(Random.Range((float)-50.5, (float)-31.5), posY, Random.Range((float)31.5, (float)48.5));
         }
+
+        // вражеский персонаж касается плоскости второго (правого) коридора
+        // задаем движение в пределах этой комнаты
+        if (col.gameObject.transform.name == currentPlane[3].name)
+        {
+            pointForMove = new Vector3(Random.Range((float)31.2, (float)38.5), posY, Random.Range((float)36.2, (float)73.5));
+        }
+
+        // вражеский персонаж касается плоскости дальнего длинного коридора
+        // задаем движение в пределах этой комнаты
+        if (col.gameObject.transform.name == currentPlane[4].name)
+        {
+            pointForMove = new Vector3(Random.Range((float)-28.5, (float)58.5), posY, Random.Range((float)76.2, (float)83.5));
+        }
     }
 
     protected virtual void OnCollisionEnter(Collision other)
