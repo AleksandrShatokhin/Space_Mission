@@ -17,7 +17,7 @@ public class MainMenuManager : MonoBehaviour
 
     void ToStartGame()
     {
-        LoadingScreen.SwitchScene("Level1");
+        LoadingScreen.SwitchScene("FirstCutscene");
     }
 
     void ToExit()
