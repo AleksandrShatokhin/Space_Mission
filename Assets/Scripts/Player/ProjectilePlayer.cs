@@ -27,8 +27,20 @@ public class ProjectilePlayer : MonoBehaviour
 
         if (other.gameObject.layer == (int)Layers.Enemy)
         {
+            // наносим урон
             other.gameObject.GetComponent<HealthComponent>().ChangeHealth(damage);
-            other.gameObject.GetComponent<EnemyController>().IsPersecution(true);
+
+            // при необходимости обернуть попаданием выстрела на себя вражесского персонажа
+            // проверяем по какому Enemy попадаем
+            if (other.gameObject.name == "EnemyBlue")
+            {
+                other.gameObject.GetComponent<EnemyBlue>().IsPersecution(true);
+            }
+
+            if (other.gameObject.name == "EnemyRed")
+            {
+                other.gameObject.GetComponent<EnemyRed>().IsPersecution(true);
+            }
         }
     }
 }

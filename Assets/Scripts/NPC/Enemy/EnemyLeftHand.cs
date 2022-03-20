@@ -16,7 +16,7 @@ public class EnemyLeftHand : MonoBehaviour
     {
         if (other.gameObject == targetPlayer)
         {
-            damage = Random.Range(5, 15);
+            damage = Random.Range(10, 20);
 
             targetPlayer.GetComponent<HealthComponent>().ChangeHealth(damage);
         }

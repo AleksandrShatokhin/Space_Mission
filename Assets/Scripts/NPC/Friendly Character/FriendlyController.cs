@@ -15,23 +15,13 @@ public class FriendlyController : FriendlyManager
 
     private void Update()
     {
-        bool isPause = GameController.GetInstance().IsPauseMode();
-
         // для избежания ошибки, после уничтожения игрока появлятся потеря targetPlayer
         if (targetPlayer == null)
         {
             return;
         }
 
-        if (isPause)
-        {
-            agent.isStopped = true;
-        }
-        else
-        {
-            agent.isStopped = false;
-            FollowThePlayer();
-        }
+        FollowThePlayer();
     }
 
     public override void FollowThePlayer()

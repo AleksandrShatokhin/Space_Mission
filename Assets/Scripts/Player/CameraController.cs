@@ -17,19 +17,20 @@ public class CameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        bool isPause = GameController.GetInstance().IsPauseMode();
         bool isDeath = GameController.GetInstance().IsDeathPlayer();
+        bool isPause = GameController.GetInstance().IsPauseMode();
+        bool isWin = GameController.GetInstance().IsWinPlayer();
 
-        if (!isPause || !isDeath)
+        if (!isDeath && !isPause && !isWin)
         {
-            MoveCamera();
             Cursor.visible = false;
         }
-        
-        if (isPause || isDeath)
+        else
         {
             Cursor.visible = true;
         }
+        
+        MoveCamera();
     }
 
     // задаем дмижение камеры мышкой

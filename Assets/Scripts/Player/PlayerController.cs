@@ -16,26 +16,26 @@ public class PlayerController : MonoBehaviour, IDeathable
 
     private Vector3 movement;
 
-    
+
     void Start()
     {
         rb_Player = GetComponent<Rigidbody>();
         animator_Player = GetComponent<Animator>();
+
+        transform.rotation = Quaternion.identity;
 
         currentQuantityBullet = bulletInWeapon;
     }
 
     void Update()
     {
-        bool isPause = GameController.GetInstance().IsPauseMode();
+        bool isDeath = GameController.GetInstance().IsDeathPlayer();
+        bool isWin = GameController.GetInstance().IsWinPlayer();
 
-        if (!isPause)
-        {
-            Shot();
-            BoostSpeed();
-        }
+        Shot();
+        BoostSpeed();
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !isDeath && !isWin)
         {
             GameController.GetInstance().PauseMode();
         }
@@ -43,12 +43,7 @@ public class PlayerController : MonoBehaviour, IDeathable
 
     void FixedUpdate()
     {
-        bool isPause = GameController.GetInstance().IsPauseMode();
-
-        if (!isPause)
-        {
-            MovePlayer();
-        }
+        MovePlayer();
     }
 
     void MovePlayer()
@@ -59,7 +54,7 @@ public class PlayerController : MonoBehaviour, IDeathable
 
         // придаем движение персонажа
         movement = transform.right * horizontal + transform.forward * vertical;
-        rb_Player.MovePosition(transform.position + (movement * speedPlayer/16));
+        rb_Player.MovePosition(transform.position + (movement * speedPlayer / 16));
     }
 
     void BoostSpeed() // добавим нашему персонажу возможность увеличить скорость движения
@@ -81,7 +76,9 @@ public class PlayerController : MonoBehaviour, IDeathable
 
     void Shot() // стрельба нашего персонажа
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0) && isReloadWeapon == false && isRun == false && currentQuantityBullet > 0)
+        bool isPause = GameController.GetInstance().IsPauseMode();
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && isReloadWeapon == false && isRun == false && currentQuantityBullet > 0 && !isPause)
         {
             // для луча найдем центр камеры и зададим переменную для хранения информации по попаданию лучем в какой объект
             Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
@@ -95,7 +92,7 @@ public class PlayerController : MonoBehaviour, IDeathable
                     Instantiate(bullet, spawnBullet.transform.position, spawnBullet.transform.rotation);
                     currentQuantityBullet -= 1;
                 }
-                
+
                 // зададим направление спаунера пули в направлении прицела
                 // чтоб пуля летела по лучу
                 Vector3 direction = hit.point - spawnBullet.transform.position;
@@ -124,10 +121,10 @@ public class PlayerController : MonoBehaviour, IDeathable
     // попробовал реализовать черех Coroutine
     IEnumerator CorReloadGunExit()
     {
-        yield return new WaitForSeconds (2.5f);
+        yield return new WaitForSeconds(2.5f);
         isReloadWeapon = false;
         animator_Player.SetBool("isReload", false);
-        
+
         // возможно, что патронов в магазине больше нет
         if (maxBulletInWeapon == 0)
         {

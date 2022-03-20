@@ -17,10 +17,12 @@ public class PauseWindow : MonoBehaviour
     void ToRestart()
     {
         LoadingScreen.SwitchScene("Level1");
+        GameController.GetInstance().TimeSpeedInGame();
     }
 
     void ToExitInMenu()
     {
         LoadingScreen.SwitchScene("MainMenu");
+        GameController.GetInstance().TimeSpeedInGame();
     }
 }

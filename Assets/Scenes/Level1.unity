@@ -1805,7 +1805,7 @@ GameObject:
   - component: {fileID: 90576822}
   - component: {fileID: 90576821}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -39004,6 +39004,7 @@ MonoBehaviour:
     type: 3}
   isDeathPlayer: 0
   isPauseMode: 0
+  isWinPlayer: 0
 --- !u!114 &2042384968
 MonoBehaviour:
   m_ObjectHideFlags: 0

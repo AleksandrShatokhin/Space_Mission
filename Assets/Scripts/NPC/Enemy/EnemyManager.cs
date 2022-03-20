@@ -23,13 +23,40 @@ public abstract class EnemyManager : ControllerNPC
 
     // каждый enemy должен реализовывать конкретные действия
     // 1 - движение (патрулирование) по отведенной ему территории
-    public abstract void MoveEnemyPatrolling();
+    public virtual void MoveEnemyPatrolling()
+    {
+        if (transform.position != pointForMove)
+        {
+            agent.SetDestination(pointForMove);
+            agent.stoppingDistance = 0;
+            anim_enemy.SetBool("isWalk", true);
+        }
+        else
+        {
+            anim_enemy.SetBool("isWalk", false);
+            agent.stoppingDistance = 1;
+            StartCoroutine(CreateNewRandomPoint());
+        }
+    }
 
     // 2 - двигаться на игрока (преследовать) в случае обнаружения
     public abstract void MoveWhenSeePlayer();
 
     // 3 - нападать на игрока (атаковать) при короткой дистанции
-    public abstract void Attack();
+    public virtual void AttackHand()
+    {
+        // если игрок на дистанции атаки
+        if (distanceToPlayer <= 2 && FieldOfView())
+        {
+            anim_enemy.SetBool("isWalk", false);
+            anim_enemy.SetBool("isFireballAttack", false);
+            anim_enemy.SetBool("isAttack", true);
+        }
+        else
+        {
+            anim_enemy.SetBool("isAttack", false);
+        }
+    }
     
 
     // вражеский персонаж должен переходить в режим преследования, если в него выстрелить
@@ -80,6 +107,15 @@ public abstract class EnemyManager : ControllerNPC
         {
             pointForMove = new Vector3(Random.Range((float)-28.5, (float)58.5), posY, Random.Range((float)76.2, (float)83.5));
         }
+    }
+
+    // создадим задерку в создании новой точки для движения врежеского персонажа
+    // для того, чтоб вражеский персонаж немного задерживался в точке
+    IEnumerator CreateNewRandomPoint()
+    {
+        yield return new WaitForSeconds(1.5f);
+
+        CheckPlaneContact();
     }
 
     protected virtual void OnCollisionEnter(Collision other)
