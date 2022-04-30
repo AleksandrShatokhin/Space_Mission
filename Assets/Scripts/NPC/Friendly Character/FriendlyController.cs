@@ -11,6 +11,9 @@ public class FriendlyController : FriendlyManager
         anim_friedly = this.GetComponent<Animator>();
 
         targetPlayer = GameObject.Find("Player").GetComponent<Transform>();
+        targetSpaceShip = GameObject.Find("PlayerShip").GetComponent<Transform>();
+
+        switchTarget = false;
     }
 
     private void Update()
@@ -21,30 +24,14 @@ public class FriendlyController : FriendlyManager
             return;
         }
 
-        FollowThePlayer();
-    }
-
-    public override void FollowThePlayer()
-    {
-        distanceToPlayer = Vector3.Distance(targetPlayer.transform.position, transform.position);
-
-        if (FieldOfView())
+        if (!switchTarget)
         {
-            agent.SetDestination(targetPlayer.transform.position);
-            anim_friedly.SetBool("isWalk", true);
-            anim_friedly.SetBool("isCrouch", false);
-            agent.stoppingDistance = 3;
-
-            if (distanceToPlayer <= 3)
-            {
-                anim_friedly.SetBool("isWalk", false);
-            }
+            base.FollowThePlayer();
         }
         else
         {
-            anim_friedly.SetBool("isCrouch", true);
-            anim_friedly.SetBool("isWalk", false);
-            agent.stoppingDistance = 0;
+            base.FollowTheSpaceShip();
         }
+
     }
 }

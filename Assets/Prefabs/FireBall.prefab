@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blast: {fileID: 3033463801269462245, guid: e567a43029f20614b88ddf2b9064a864, type: 3}
+  audioFireBall: {fileID: 8300000, guid: 474399a98cfd69b4685e66ece29801af, type: 3}
 --- !u!1 &3778471770140748167
 GameObject:
   m_ObjectHideFlags: 0

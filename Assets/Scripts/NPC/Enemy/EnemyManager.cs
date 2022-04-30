@@ -10,6 +10,9 @@ public abstract class EnemyManager : ControllerNPC
 
     protected NavMeshAgent agent;
     protected Animator anim_enemy;
+    protected AudioSource audioSourceEnemy;
+
+    [SerializeField] protected AudioClip scream;
 
     protected Vector3 pointForMove;
 
@@ -20,6 +23,23 @@ public abstract class EnemyManager : ControllerNPC
     protected Collision col;
 
     //---------------------------------------------------------------------------------------------------------
+
+    protected void ConnectingTheMainComponents()
+    {
+        agent = this.GetComponent<NavMeshAgent>();
+        anim_enemy = this.GetComponent<Animator>();
+        audioSourceEnemy = this.GetComponent<AudioSource>();
+    }
+
+    protected IEnumerator Scream(float delay)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delay);
+            audioSourceEnemy.PlayOneShot(scream, 0.5f);
+            anim_enemy.SetTrigger("isScream");
+        }
+    }
 
     // каждый enemy должен реализовывать конкретные действия
     // 1 - движение (патрулирование) по отведенной ему территории
@@ -71,7 +91,7 @@ public abstract class EnemyManager : ControllerNPC
     protected void CheckPlaneContact()
     {
         List<MeshCollider> currentPlane = GameController.GetInstance().GetPlane();
-        float posY = 0.01962253f; // позиция по Y для движения вражеский персонажей
+        float posY = 0.08333334f; // позиция по Y для движения вражеский персонажей
 
         // вражеский персонаж касается плоскости перовой комнаты
         // задаем движение в пределах этой комнаты
@@ -126,5 +146,18 @@ public abstract class EnemyManager : ControllerNPC
             col = other;
             CheckPlaneContact();
         }
+    }
+
+    // Event на старте анимации удара рукой
+    // обнуляем возможность наносить урон рукой
+    public void IsHandHitThePlayerToFalse()
+    {
+        EnemyLeftHand.isHandHitThePlayer = false;
+    }
+
+    public void DeathEnemy()
+    {
+        anim_enemy.SetTrigger("isDeath");
+        Destroy(gameObject, 1.0f);
     }
 }

@@ -26,12 +26,18 @@ public class ControllerNPC : MonoBehaviour, IDeathable
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
                 if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstacleMask))
+                {
                     canSeePlayer = true;
+                }
                 else
+                {
                     canSeePlayer = false;
+                }
             }
             else
+            {
                 canSeePlayer = false;
+            }
         }
         else if (canSeePlayer)
             canSeePlayer = false;

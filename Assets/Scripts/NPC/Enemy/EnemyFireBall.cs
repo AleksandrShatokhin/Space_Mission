@@ -6,39 +6,38 @@ public class EnemyFireBall : MonoBehaviour
 {
     private int damage;
     private GameObject target;
-    [SerializeField] private GameObject blast;
 
     private float forceRate = 20.0f;
     private Rigidbody rb_Fireball;
 
+    [SerializeField] private AudioClip audioFireBall;
+
     void Start()
     {
-        target = GameObject.Find("Player");
+        target = GameObject.Find("TargetForFireball");
 
         Vector3 relativePos = target.transform.position - transform.position;
-        Quaternion rotationTestObject = Quaternion.LookRotation(relativePos, Vector3.up);
-        transform.rotation = rotationTestObject;
+        Quaternion rotationEnemyFireball = Quaternion.LookRotation(relativePos, Vector3.up);
+        transform.rotation = rotationEnemyFireball;
 
         rb_Fireball = GetComponent<Rigidbody>();
         rb_Fireball.AddForce(transform.forward * forceRate, ForceMode.Impulse);
 
-        Destroy(this.gameObject, 3.0f);
-    }
+        GameController.GetInstance().PlayAudio(audioFireBall);
 
-    private void OnDestroy()
-    {
-        Instantiate(blast, transform.position, Quaternion.identity);
+        Destroy(this.gameObject, 3.0f);
     }
 
     void OnCollisionEnter(Collision other)
     {
         Destroy(this.gameObject);
 
-        if (other.gameObject == target)
+        if (other.gameObject.tag == "Player")
         {
             damage = Random.Range(5, 15);
 
-            target.GetComponent<HealthComponent>().ChangeHealth(damage);
+            other.gameObject.GetComponent<HealthComponent>().ChangeHealth(damage);
+            other.gameObject.GetComponent<PlayerController>().PlayAudioPain();
         }
     }
 }

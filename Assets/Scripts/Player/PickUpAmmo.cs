@@ -5,6 +5,7 @@ using UnityEngine;
 public class PickUpAmmo : MonoBehaviour
 {
     private int ammoInBox = 5;
+    [SerializeField] private AudioClip audioPickup;
 
     void OnTriggerEnter(Collider collider)
     {
@@ -21,6 +22,8 @@ public class PickUpAmmo : MonoBehaviour
             
             if (ammoWithPlayer < acceptableValue)
             {
+                GameController.GetInstance().PlayAudio(audioPickup);
+
                 difference = acceptableValue - ammoWithPlayer;
 
                 if (difference < ammoInBox)

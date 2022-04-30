@@ -6,15 +6,19 @@ using UnityEngine.AI;
 public class EnemyRed : EnemyManager
 {
     [SerializeField] private GameObject fireball, spawnFire;
+    [SerializeField] private LayerMask doorMask;
+    [SerializeField] bool isDoor;
 
     void Start()
     {
-        agent = this.GetComponent<NavMeshAgent>();
-        anim_enemy = this.GetComponent<Animator>();
+        ConnectingTheMainComponents();
 
         targetPlayer = GameObject.Find("Player").GetComponent<Transform>();
 
         StartCoroutine(FOVRoutine());
+
+        float randomDelay = Random.Range(3, 5);
+        StartCoroutine(Scream(randomDelay));
     }
 
     void Update()
@@ -60,6 +64,32 @@ public class EnemyRed : EnemyManager
         Instantiate(fireball, spawnFire.transform.position, Quaternion.identity);
     }
 
+    private bool CheckDoorOnPath()
+    {
+        Collider[] colliderPlayer = Physics.OverlapSphere(transform.position, radiusView, playerMask);
+
+        if (colliderPlayer.Length != 0)
+        {
+            Transform target = colliderPlayer[0].transform;
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
+
+            if (Vector3.Angle(transform.forward, directionToTarget) < angleView / 2)
+            {
+                float distance = Vector3.Distance(transform.position, target.position);
+
+                if (!Physics.Raycast(transform.position, directionToTarget, distance, doorMask))
+                {
+                    isDoor = false;
+                }
+                else
+                {
+                    isDoor = true;
+                }
+            }
+        }
+        return isDoor;
+    }
+
     void AttackFireBall()
     {
         float speedRotate = 7.0f;
@@ -71,6 +101,7 @@ public class EnemyRed : EnemyManager
 
         if (distanceToPlayer <= 10 && distanceToPlayer > 2 && FieldOfView())
         {
+            agent.isStopped = true;
             anim_enemy.SetBool("isWalk", false);
             anim_enemy.SetBool("isFireballAttack", true);
         }
@@ -86,11 +117,22 @@ public class EnemyRed : EnemyManager
         if (distanceToPlayer > 10)
         {
             agent.SetDestination(targetPlayer.transform.position);
-            agent.stoppingDistance = 10;
+            agent.isStopped = false;
             anim_enemy.SetBool("isWalk", true);
         }
 
-        AttackFireBall();
+        // исключаю стрельбу по игроку, когда разделяет дверь
+        // огненые шары летят в игрока сквозь дверь
+        if (!CheckDoorOnPath())
+        {
+            AttackFireBall();
+        }
+        else
+        {
+            agent.SetDestination(targetPlayer.transform.position);
+            agent.isStopped = false;
+            anim_enemy.SetBool("isWalk", true);
+        }
 
         // красный вражеский персонаж тоже имеет возможность
         // бить рукой при короткой дистанции

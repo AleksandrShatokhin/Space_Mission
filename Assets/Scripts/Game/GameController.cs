@@ -14,6 +14,10 @@ public class GameController : MonoBehaviour
     // статусы
     [SerializeField] private bool isDeathPlayer, isPauseMode, isWinPlayer;
 
+    private AudioSource gameAudio;
+    [SerializeField] private AudioClip audioPause;
+
+
     //-----------------------------------------------------------------------------------------------------------
 
     private void Awake()
@@ -26,6 +30,8 @@ public class GameController : MonoBehaviour
         isDeathPlayer = false;
         isPauseMode = false;
         isWinPlayer = false;
+
+        gameAudio = GetComponent<AudioSource>();
     }
 
     public void PauseMode()
@@ -35,6 +41,7 @@ public class GameController : MonoBehaviour
             isPauseMode = true;
             TimeSpeedInGame();
             mainui.SetActive(false);
+            PlayAudio(audioPause);
             Instantiate(pauseWindow, pauseWindow.transform.position, pauseWindow.transform.rotation);
         }
         else
@@ -44,6 +51,7 @@ public class GameController : MonoBehaviour
             isPauseMode = false;
             TimeSpeedInGame();
             mainui.SetActive(true);
+            PlayAudio(audioPause);
             Destroy(pause);
         }
     }
@@ -98,5 +106,10 @@ public class GameController : MonoBehaviour
     public List<MeshCollider> GetPlane()
     {
         return this.gameObject.GetComponent<Spawn>().planes;
+    }
+
+    public void PlayAudio(AudioClip audio)
+    {
+        gameAudio.PlayOneShot(audio, 0.5f);
     }
 }

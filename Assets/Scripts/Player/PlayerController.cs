@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour, IDeathable
     [SerializeField] private int bulletInWeapon, maxBulletInWeapon;
     private int differenceBullet, currentQuantityBullet;
 
+    [SerializeField] private AudioClip audioShot,audioReloadGun, audioPain, audioStep;
+
     [SerializeField] private float speedPlayer;
     [SerializeField] private bool isReloadWeapon, isRun;
 
@@ -55,6 +57,19 @@ public class PlayerController : MonoBehaviour, IDeathable
         // придаем движение персонажа
         movement = transform.right * horizontal + transform.forward * vertical;
         rb_Player.MovePosition(transform.position + (movement * speedPlayer / 16));
+
+        // проверка на движение для запуска соответствующих анимаций
+        if (horizontal != 0.0f || vertical != 0.0f)
+        {
+            if (!isRun)
+            {
+                animator_Player.SetInteger("isWalk", 1);
+            }
+        }
+        else
+        {
+            animator_Player.SetInteger("isWalk", 0);
+        }
     }
 
     void BoostSpeed() // добавим нашему персонажу возможность увеличить скорость движения
@@ -62,7 +77,7 @@ public class PlayerController : MonoBehaviour, IDeathable
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speedPlayer = 3;
-            animator_Player.SetInteger("isWalk", 1);
+            animator_Player.SetInteger("isWalk", 2);
             isRun = true;
         }
 
@@ -90,6 +105,7 @@ public class PlayerController : MonoBehaviour, IDeathable
                 if (currentQuantityBullet != 0)
                 {
                     Instantiate(bullet, spawnBullet.transform.position, spawnBullet.transform.rotation);
+                    GameController.GetInstance().PlayAudio(audioShot);
                     currentQuantityBullet -= 1;
                 }
 
@@ -110,6 +126,7 @@ public class PlayerController : MonoBehaviour, IDeathable
         {
             isReloadWeapon = true;
             animator_Player.SetBool("isReload", true);
+            GameController.GetInstance().PlayAudio(audioReloadGun);
 
             // определяем разницу потронов текущих от полной обоимы
             differenceBullet = bulletInWeapon - currentQuantityBullet;
@@ -185,6 +202,17 @@ public class PlayerController : MonoBehaviour, IDeathable
         {
             GameController.GetInstance().DeathPlayer();
         }
+    }
+
+    // на случай получения урона от огненого шара
+    public void PlayAudioPain()
+    {
+        GameController.GetInstance().PlayAudio(audioPain);
+    }
+
+    public void PlayAudioStep()
+    {
+        GameController.GetInstance().PlayAudio(audioStep);
     }
 
     void IDeathable.Kill()

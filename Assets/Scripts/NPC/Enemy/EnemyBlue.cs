@@ -7,12 +7,14 @@ public class EnemyBlue : EnemyManager
 {
     void Start()
     {
-        agent = this.GetComponent<NavMeshAgent>();
-        anim_enemy = this.GetComponent<Animator>();
+        ConnectingTheMainComponents();
 
         targetPlayer = GameObject.Find("Player").GetComponent<Transform>();
 
         StartCoroutine(FOVRoutine());
+
+        float randomDelay = Random.Range(3, 5);
+        StartCoroutine(Scream(randomDelay));
     }
 
     void Update()
